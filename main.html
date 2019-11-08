@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+h1
+{
+ color: black;
+}
+h3
+{
+color:black;
+}
+button
+ {
+ background-color:#F0EAD6;
+ border: none;
+ color: black;
+ padding: 50px 50px;
+ text-align: center;
+ text-decoration: none;
+ display: inline-block;
+ font-size: 18px;
+ margin: 16px 16px;
+ cursor: pointer;
+ position:relative;
+}
+#more,#less{
+  background-color:black; 
+  border: none; 
+  color: white; 
+  padding: 12px 24px;
+  font-size: 16px; 
+}
+body
+{
+   background-color:#8B008B ;
+  height: 500px;
+  width:100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+}
+div
+{
+   text-align: center;
+    top: 50%;
+    left: 50%;
+    display:block;
+   }
+input[type=text] { 
+      width: 70%; 
+      -webkit-transition: width 0.15s ease-in-out; 
+      transition: width 0.15s ease-in-out; 
+   } 
+ 
+ 
+#MovieName{ 
+     margin-left: 15%; 
+     padding:15px; 
+     border-radius: 10px; 
+   } 
+
+</style>
+
+</head>
+<body>
+   <h1><center><B> MOVIE WIKI</B></center></h1>
+<br>
+<div>
+<nav>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<center><I><input type="text" id="MovieName" placeholder="Search for Movies"  onkeyup=DisplayList()></I></center>
+
+</div>
+<div id="searchResults"></div>
+<div id="footer"></div>
+<div id="moreResults"></div>
+<script>
+
+//Javascript code
+var len=0;
+var count=0;
+var mr,res;
+var f=0,f1=0;
+function DisplayList()
+{
+//Input from the user
+var MovieTitle= document.getElementById("MovieName").value;
+var parentDiv = document.getElementById("searchResults");
+//removing the past results or cards
+if(MovieTitle.length==0)
+{
+count=0;
+ while(parentDiv.hasChildNodes()) {
+parentDiv.removeChild(parentDiv.childNodes[0]);
+}
+parentDiv = document.getElementById("moreResults");
+ while(parentDiv.hasChildNodes()) {
+parentDiv.removeChild(parentDiv.childNodes[0]);
+}
+parentDiv = document.getElementById("footer");
+ if(parentDiv.hasChildNodes()) {
+parentDiv.removeChild(parentDiv.childNodes[0]);
+}
+f=0;
+f1=0;
+return;
+}
+else if(MovieTitle.length<len)
+{
+document.getElementById("footer").style.visibility = "visible";
+parentDiv = document.getElementById("moreResults");
+ while(parentDiv.hasChildNodes()) {
+parentDiv.removeChild(parentDiv.childNodes[0]);
+count--;
+}
+parentDiv = document.getElementById("footer");
+ if(parentDiv.hasChildNodes()) {
+parentDiv.removeChild(parentDiv.childNodes[0]);
+}
+f=0;
+f1=0;
+}
+else if(len<MovieTitle.length)
+{
+fetch('http://www.omdbapi.com/?t='+MovieTitle+'&apikey=86c08e90'+'')
+ .then(response => response.json())
+ .then(data => {
+// data would contain the list of related json objects of the movies
+var a=data;
+//get results
+var parentDiv = document.getElementById("searchResults");
+
+//displaying data
+if(typeof (a.Title)==='undefined')
+return;
+var button = document.createElement("button");
+var img = document.createElement("img");
+button.id=a.imdbID;
+img.src = a.Poster;
+img.width=150;
+img.height=150;
+img.alt = "Poster unavailable";
+img.alt.id="pu";
+var nd = document.createElement("div");
+var myp = document.createElement("p");
+button.appendChild(img);
+nd.appendChild(button);
+myp.innerHTML=a.Title+' ';
+nd.appendChild(myp);
+// Append results
+var seares= document.getElementById("searchResults");
+seares.appendChild(nd);
+count++;
+
+if(count>2)
+{
+res= document.getElementById("footer");
+ mr=document.getElementById("moreResults");
+if(f==0)
+{
+document.getElementById("moreResults").style.visibility = "hidden";
+var button1 = document.createElement("button");
+button1.id="more";
+button1.innerHTML="Show more filters ";
+button1.onclick=function()
+{
+document.getElementById("footer").style.visibility = "hidden";
+document.getElementById("moreResults").style.visibility = "visible";
+mr=document.getElementById("moreResults");
+var button2 = document.createElement("button");
+if(f1==0)
+{
+button2.id="less";
+button2.innerHTML="Show less filters ";
+mr.appendChild(button2);
+button2.onclick=function()
+{
+document.getElementById("moreResults").style.visibility = "hidden";
+document.getElementById("footer").style.visibility = "hidden";
+var parent = document.getElementById("moreResults");
+var child = document.getElementById("less");
+parent.removeChild(child);
+f1=0;
+}
+f1=1;
+}
+}
+res.appendChild(button1);
+f=1;
+}
+mr.appendChild(nd);
+}
+else
+{
+res= document.getElementById("searchResults");
+res.appendChild(nd);
+}
+console.log(a.Title);
+button.onclick=function()
+{
+window.location.href ="next.html?i="+this.id+"&apikey=86c08e90";
+}
+});
+}
+len=MovieTitle.length;
+console.log("count");
+}
+
+</script>
+</body>
+</html>
+ 
