@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<h1><a id="a" href="main.html" onClick="history.go(-1); return false;">Click here to go back..</a></h1>
+<head>
+<style>
+p{
+font-family:Times New Roman;
+text-align:center;
+}
+body
+{
+background-color:#EEE2DC;
+}
+a{
+color:#FF0000;
+text-decoration:none
+}
+a:hover { color: #00FF00; }
+
+
+</style>
+<script>
+
+//fetch the query from before page
+var queryString = decodeURIComponent(window.location.search);
+
+//split the query to get the alphacode
+var qs = queryString.split("?");
+var  result= qs[1];
+
+//fetching and printing in console
+fetch('http://www.omdbapi.com/?'+result+'')
+  .then(response => response.json())
+  .then(data => {
+    // selected country full data
+    var b=document.getElementsByTagName("header")[0];
+    var h=document.createElement("h2");
+    h.innerText=data.Title;
+    b.appendChild(h);
+    var img=document.getElementsByTagName("img")[0];
+    img.src=data.Poster;
+    img.width=450;
+    img.height=250;
+   var para=document.getElementsByTagName("p")[0];
+   var d1 =document.createElement("h2");
+   d1.innerText = "Released Date:  "+data.Released;
+   para.appendChild(d1);
+  var d2 =document.createElement("h2");
+   d2.innerText = "Genre:    "+data.Genre;
+   para.appendChild(d2);
+var d3 =document.createElement("h2");
+   d3.innerText = "Director:              "+data.Director;
+   para.appendChild(d3);
+var d4 =document.createElement("h2");
+   d4.innerText = "Language:               "+data.Language;
+   para.appendChild(d4);
+var d5 =document.createElement("h2");
+   d5.innerText = "Country:            "+data.Country;
+   para.appendChild(d5);
+var d6 =document.createElement("h2");
+   d6.innerText = "Actors:           "+data.Actors;
+   para.appendChild(d6);
+var d7 =document.createElement("h2");
+   d7.innerText = "Plot:         "+data.Plot;
+   para.appendChild(d7);
+}
+);
+
+</script>
+<body>
+<center><h1><header></header><h1></center>
+        <div>
+ 
+       <center><img></center></div>
+
+<div>        
+<p></p>
+
+</div>
+
+</body>
+</html>
